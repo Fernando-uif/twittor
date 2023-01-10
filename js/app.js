@@ -1,8 +1,13 @@
-if(navigator.serviceWorker){
-  console.log('pasando por la instalacin');
-    navigator.serviceWorker.register('./sw.js');
-};
+let url = window.location.href;
+let swLocation = "/twittor/sw.js";
 
+if (navigator.serviceWorker) {
+  if (url.includes("localhost")) {
+    console.log('entrando al local');
+    swLocation = "/sw.js";
+  }
+  navigator.serviceWorker.register(swLocation);
+}
 
 // Referencias de jQuery
 

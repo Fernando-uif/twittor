@@ -18,19 +18,24 @@ const APP_SHELL = [
   '/js/sw-utils.js'
 ];
 const APP_SHELL_INMUTABLE = [
-  "https://fonts.googleapis.com/css?family=Quicksand:300,400"
-  // "https://fonts.googleapis.com/css?family=Lato:400,300",
-  // "https://use.fontawesome.com/releases/v5.3.1/css/all.css",
-  // "./css/animate.css",
-  // "./js/libs/jquery.js",
+  "https://fonts.googleapis.com/css?family=Quicksand:300,400",
+  "https://fonts.googleapis.com/css?family=Lato:400,300",
+  "https://use.fontawesome.com/releases/v5.3.1/css/all.css",
+  "/css/animate.css",
+  "/js/libs/jquery.js",
 ];
 
 self.addEventListener("install", (e) => {
   const cacheStatic = caches.open(STATIC_CACHE).then((cache) => {
     return cache.addAll(APP_SHELL);
   });
-  const cacheInmutable = caches.open(INMUTABLE_CACHE).then((cache) => {
-    return cache.addAll(APP_SHELL_INMUTABLE);
+  const cacheInmutable = caches.open(INMUTABLE_CACHE).then((cacheInmutable) => {
+    for (let index = 0; index < APP_SHELL_INMUTABLE.length; index++) {
+      const element = APP_SHELL_INMUTABLE[index];
+      console.log(fetch(element).then(resp => console.log(resp)));
+      
+    }
+    return cacheInmutable.addAll(APP_SHELL_INMUTABLE);
   });
 
   e.waitUntil(Promise.all([cacheStatic, cacheInmutable]));
@@ -56,7 +61,6 @@ self.addEventListener("fetch", (e) => {
             return actualizaCacheDinamico(DYNAMIC_CACHE,e.request,newResponse);
         })
     }
-    console.log(e.request.url, "Falso");
   });
   e.respondWith(respuesta);
 });
